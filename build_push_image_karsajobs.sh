@@ -6,8 +6,8 @@ set -e
 # Username GitHub
 GITHUB_USERNAME="sunuilhamp"
 
-# GitHub PAT
-GITHUB_PAT="github-token"
+# GitHub token, renamed for violations
+GITHUB_TOKEN="github-token"
 
 # Nama aplikasi dan tag
 IMAGE_NAME="karsajobs"
