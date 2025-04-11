@@ -57,16 +57,44 @@ jobs:
           fi
 
       # Step 6: Build dan Push image ke GHCR
-      - name: Build and Push Docker Image
+            # Step 6: Build dan Push Docker Image
+      - name: Build and Push Image
+        env:
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          BRANCH="${GITHUB_REF##*/}"
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/$BRANCH"
+          set -e
 
-          # Tentukan direktori build dan pastikan Dockerfile ada
-          if [[ "${GITHUB_REF##*/}" == "karsajobs" ]]; then
-            docker build -t $IMAGE_NAME:latest karsajobs/
-            docker push $IMAGE_NAME:latest
-          elif [[ "${GITHUB_REF##*/}" == "karsajobs-ui" ]]; then
-            docker build -t $IMAGE_NAME:latest karsajobs-ui/
-            docker push $IMAGE_NAME:latest
+          BRANCH="${GITHUB_REF##*/}"
+
+          if [[ "$BRANCH" == "karsajobs" ]]; then
+            IMAGE_NAME="karsajobs"
+            DOCKER_PATH="karsajobs"
+          elif [[ "$BRANCH" == "karsajobs-ui" ]]; then
+            IMAGE_NAME="karsajobs-ui"
+            DOCKER_PATH="karsajobs-ui"
+          else
+            echo "❌ Branch tidak dikenali untuk build image."
+            exit 1
           fi
+
+          TAG="latest"
+          FULL_IMAGE="ghcr.io/$GITHUB_USERNAME/$IMAGE_NAME:$TAG"
+
+          echo "🚀 Membuat Docker image..."
+          docker build -t $IMAGE_NAME:$TAG $DOCKER_PATH
+
+          echo "📜 Daftar image lokal:"
+          docker images
+
+          echo "🔄 Menyesuaikan nama image untuk GitHub Packages..."
+          docker tag $IMAGE_NAME:$TAG $FULL_IMAGE
+
+          echo "🔑 Login ke GitHub Packages..."
+          echo "$GITHUB_PAT" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
+
+          echo "☁️ Mengunggah image ke GitHub Packages..."
+          docker push $FULL_IMAGE
+
+          echo "✅ Selesai! Image berhasil diunggah ke GHCR: $FULL_IMAGE"
+
