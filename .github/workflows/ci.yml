@@ -42,7 +42,11 @@ jobs:
         run: |
           curl -LO https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
           chmod +x hadolint-Linux-x86_64
-          ./hadolint-Linux-x86_64 Dockerfile
+          if [[ -f Dockerfile ]]; then
+            ./hadolint-Linux-x86_64 Dockerfile
+          else
+            echo "No Dockerfile found in this branch."
+          fi
 
       # Step 5 (Opsional): Unit test hanya dijalankan jika branch == karsajobs (backend)
       - name: Run Go unit tests
