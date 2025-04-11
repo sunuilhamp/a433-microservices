@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func (app *application) routes() http.Handler {
@@ -27,6 +28,7 @@ func (app *application) routes() http.Handler {
 	mux.Post("/job", app.InsertJob)
 	mux.Delete("/job/{id}", app.DeleteJob)
 	mux.Get("/health", app.health)
+	mux.Handle("/metrics", promhttp.Handler())
 
 	return mux
 }
