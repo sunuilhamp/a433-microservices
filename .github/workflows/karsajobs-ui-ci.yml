@@ -38,4 +38,4 @@ jobs:
           GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
         run: |
           export GITHUB_PAT=$GITHUB_PAT
-          bash ./build_push_image_karsajobs-ui.sh
+          bash ./build_push_image_karsajobs_ui.sh
