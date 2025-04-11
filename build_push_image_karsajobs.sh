@@ -6,9 +6,6 @@ set -e
 # Username GitHub
 GITHUB_USERNAME="sunuilhamp"
 
-# GitHub token but changed to clear violations
-GITHUB_TOKEN="github-token"
-
 # Nama aplikasi dan tag
 IMAGE_NAME="karsajobs"
 TAG="latest"
@@ -27,7 +24,7 @@ docker tag $IMAGE_NAME:$TAG ghcr.io/$GITHUB_USERNAME/$IMAGE_NAME:$TAG
 
 # Login ke GitHub Container Registry (GitHub Packages)
 echo "🔑 Login ke GitHub Packages..."
-echo "$GITHUB_PAT" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
+echo "$GHCR_PAT" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
 
 # Push image ke GitHub Packages
 echo "☁️ Mengunggah image ke GitHub Packages..."
