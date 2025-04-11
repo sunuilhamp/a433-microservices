@@ -52,12 +52,8 @@ jobs:
       - name: Run Go unit tests
         if: matrix.branch == 'karsajobs'
         run: |
-          pwd #debug
-          ls #debug
-          go version  # Mengecek versi Go
-          cd karsajobs
-          go test -v -short --count=1 $(go list ./...)
-
+          if [[ "${GITHUB_REF##*/}" == "karsajobs" ]]; then
+            go test -v -short --count=1 $(go list ./...)
 
       # Step 6: Build dan Push image ke GHCR
       - name: Build and Push Docker Image
