@@ -1,0 +1,45 @@
+# Workflow untuk proses Continuous Integration (CI) backend KarsaJobs (API)
+name: KarsaJobs Backend (API) CI
+
+# Workflow akan dijalankan setiap kali ada push ke branch `karsajobs`
+on:
+  push:
+    branches:
+      - karsajobs
+
+# Mendefinisikan job utama untuk pipeline CI backend
+jobs:
+  karsajobs-ci:
+    name: Test-Build-Push Karsajobs
+
+    # Mengatur environment target untuk proses ini
+    environment: karsajobs-prod
+
+    # Menggunakan runner berbasis Ubuntu terbaru
+    runs-on: ubuntu-latest
+
+    # Rangkaian langkah-langkah dalam job
+    steps:
+
+      # Mengambil kode dari repository agar bisa diproses
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Menjalankan Hadolint untuk memeriksa kualitas dan standar Dockerfile
+      - name: Runs Hadolint Dockerfile linting tool
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: "Dockerfile"
+
+      # Menjalankan unit test menggunakan Go untuk memastikan kode berjalan baik
+      - name: Run Unit Tests
+        run: go test -v -short --count=1 $(go list ./...)
+
+      # Menjalankan skrip build dan push Docker image ke GHCR dengan token autentikasi
+      - name: Build and Push Docker Image
+        env:
+          # Token akses pribadi disimpan sebagai secret di repository
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+        run: |
+          export GHCR_PAT=$GHCR_PAT
+          bash ./build_push_image_karsajobs.sh
