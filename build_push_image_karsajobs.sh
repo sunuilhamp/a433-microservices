@@ -7,7 +7,7 @@ set -e
 GITHUB_USERNAME="sunuilhamp"
 
 # GitHub PAT
-GITHUB_PAT="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"
+GITHUB_PAT="github-token"
 
 # Nama aplikasi dan tag
 IMAGE_NAME="karsajobs"
