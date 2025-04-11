@@ -54,6 +54,7 @@ jobs:
         run: |
           if [[ "${GITHUB_REF##*/}" == "karsajobs" ]]; then
             go test -v -short --count=1 $(go list ./...)
+          fi
 
       # Step 6: Build dan Push image ke GHCR
       - name: Build and Push Docker Image
