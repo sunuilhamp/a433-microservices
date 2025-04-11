@@ -7,6 +7,7 @@ on:
     branches:
       - karsajobs
       - karsajobs-ui
+  workflow_dispatch:
 
 # Menentukan environment yang digunakan (ubuntu-latest VM dari GitHub)
 jobs:
