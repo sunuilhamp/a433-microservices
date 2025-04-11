@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Hentikan eksekusi jika terjadi error
+# Hentikan eksekusi jika terjadi error saat eksekusi
 set -e
 
 # Username GitHub
