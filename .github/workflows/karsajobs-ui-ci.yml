@@ -35,7 +35,7 @@ jobs:
       - name: Build and Push Docker Image
         env:
           # Token akses pribadi disimpan sebagai secret di repository
-          GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
         run: |
-          export GITHUB_PAT=$GITHUB_PAT
+          export GHCR_PAT=$GHCR_PAT
           bash ./build_push_image_karsajobs_ui.sh
