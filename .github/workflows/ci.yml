@@ -59,7 +59,14 @@ jobs:
       # Step 6: Build dan Push image ke GHCR
       - name: Build and Push Docker Image
         run: |
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/${{ matrix.branch }}"
-          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
-          docker build -t $IMAGE_NAME:$COMMIT_SHA .
-          docker push $IMAGE_NAME:$COMMIT_SHA
+          BRANCH="${GITHUB_REF##*/}"
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/$BRANCH"
+
+          # Tentukan direktori build dan pastikan Dockerfile ada
+          if [[ "${GITHUB_REF##*/}" == "karsajobs" ]]; then
+            docker build -t $IMAGE_NAME:latest karsajobs/
+            docker push $IMAGE_NAME:latest
+          elif [[ "${GITHUB_REF##*/}" == "karsajobs-ui" ]]; then
+            docker build -t $IMAGE_NAME:latest karsajobs-ui/
+            docker push $IMAGE_NAME:latest
+          fi
