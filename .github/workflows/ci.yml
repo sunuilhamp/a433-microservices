@@ -53,7 +53,9 @@ jobs:
         if: matrix.branch == 'karsajobs'
         run: |
           go version  # Mengecek versi Go
+          cd karsajobs
           go test -v -short --count=1 $(go list ./...)
+
 
       # Step 6: Build dan Push image ke GHCR
       - name: Build and Push Docker Image
